@@ -23,6 +23,9 @@
 // clang++-3.9 citutorial.cpp $(llvm-config-3.9 --cxxflags) $(llvm-config-3.9 --ldflags --libs --system-libs) -lclangFrontend -lclangFrontendTool  -lclangParse -lclangSema -lclangEdit -lclangRewrite -lclangRewriteFrontend -lclangStaticAnalyzerFrontend -lclangStaticAnalyzerCheckers -lclangStaticAnalyzerCore -lclangSerialization -lclangFormat -lclangDriver -lclangTooling -lclangToolingCore -lclangAST -lclangLex -lclangAnalysis -lclangBasic
 // clang++-3.9 citutorial.cpp $(llvm-config-3.9 --cxxflags) $(llvm-config-3.9 --ldflags --libs --system-libs) -lclangFrontend -lclangFrontendTool  -lclangParse -lclangSema -lclangEdit -lclangRewrite -lclangRewriteFrontend -lclangStaticAnalyzerFrontend -lclangStaticAnalyzerCheckers -lclangStaticAnalyzerCore -lclangSerialization -lclangFormat -lclangDriver -lclangTooling -lclangToolingCore -lclangAST -lclangLex -lclangAnalysis -lclangBasic
 //./a.out input04.c
+
+// SourceLocation	
+// 
 static std::ofstream *pWstream = NULL;
 
 class CovmeASTVisitor : public clang::RecursiveASTVisitor<CovmeASTVisitor>
@@ -32,24 +35,25 @@ public:
 
 	bool VisitStmt(clang::Stmt *s)
 	{
+		fprintf(stdout, "******** VisitStmt In  ... ********\n");
 		s->getStmtClass();
 		fprintf(stdout, "visitStmt:%s \n", s->getStmtClassName() );
+		fprintf(stdout, "******** VisitStmt Out ... ********\n\n");
 		return true;
 	}
 
 	bool VisitFunctionDecl(clang::FunctionDecl *f)
 	{
-		fprintf(stdout, "getname:%s\n", f->getNameAsString().c_str());
-		fprintf(stdout, "params:%d\n", f->getNumParams());
+		fprintf(stdout, "Function Name:%s\n", f->getNameAsString().c_str());
+		fprintf(stdout, "params       :%d\n", f->getNumParams());
 
 		// =================================================
-		// 引数
+		// 蠑墓焚
 		// =================================================
-		fprintf(stdout, "%s\n", f->getReturnType().getAsString().c_str());
 		for (unsigned int i = 0; i < f->getNumParams(); i++)
 		{
 			clang::ParmVarDecl *arg = f->getParamDecl(i);
-			fprintf(stdout, "arg:%s\n", arg->getOriginalType().getAsString().c_str());
+			fprintf(stdout, "Arg[%d] type  :%s\n", i, arg->getOriginalType().getAsString().c_str());
 
 			//clang::APValue *pValue = arg->evaluateValue();
 			clang::APValue *pValue = arg->getEvaluatedValue();
@@ -63,10 +67,12 @@ public:
 		}
 
 		// =================================================
-		// 戻り値
+		// 謌ｻ繧雁､
 		// =================================================
-		fprintf(stdout, "Return Type:%s\n", f->getReturnType().getAsString().c_str());
-		fprintf(stdout, "Call Result Type:%s\n", f->getCallResultType().getAsString().c_str());
+		fprintf(stdout, "------------ Return Info Start ------------\n");
+		fprintf(stdout, "Return Type  :%s\n", f->getReturnType().getAsString().c_str());
+		fprintf(stdout, "Call Result  :%s\n", f->getCallResultType().getAsString().c_str());
+		fprintf(stdout, "------------ Return Info End   ------------\n");
 		return true;
 	}
 };
@@ -79,17 +85,17 @@ public:
 
 	virtual bool HandleTopLevelDecl( clang::DeclGroupRef d)
     {
-    	fprintf(stdout, "HandleTopLevelDecl In...\n");
+    	fprintf(stdout, "---------------- HandleTopLevelDecl In... ----------------\n");
         clang::DeclGroupRef::iterator it;
         for( it = d.begin(); it != d.end(); it++)
         {
         	clang::Decl *decl = llvm::dyn_cast<clang::Decl>(*it);
-        	printf("kind name:%s\n", decl->getDeclKindName());
+        	printf("Kind Name    :%s\n", decl->getDeclKindName());
         	CovmeASTVisitor visitor;
         	visitor.TraverseDecl(*it);
 
         }
-    	printf("HandleTopLevelDecl Out...\n");
+    	printf("---------------- HandleTopLevelDecl Out... ----------------\n");
         return true;
     }
 };
@@ -114,6 +120,8 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
+	fprintf(stdout, "******************** Program Start ********************\n");
+
     CompilerInstance compilerInstance;
     DiagnosticOptions diagnosticOptions;
     compilerInstance.createDiagnostics();
@@ -137,7 +145,7 @@ int main(int argc, char **argv)
     clang::ParseAST(compilerInstance.getPreprocessor(), &compilerInstance.getASTConsumer(), compilerInstance.getASTContext());
     compilerInstance.getDiagnosticClient().EndSourceFile();
 
-	//出力ストリームの作成
+	//蜃ｺ蜉帙せ繝医Μ繝ｼ繝縺ｮ菴懈��
 	string filepath = "test_" + string(argv[1]);
     std::ofstream ofs(filepath, std::ios::out);
 	pWstream = &ofs;
@@ -146,5 +154,7 @@ int main(int argc, char **argv)
 	*pWstream << "    return;" << std::endl;
 	*pWstream << "}" << std::endl;
 	pWstream->close();
+
+	fprintf(stdout, "******************** Program End ********************\n");
     return 0;
 }
