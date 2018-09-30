@@ -18,9 +18,11 @@
 #include "clang/Parse/Parser.h"
 #include "clang/Parse/ParseAST.h"
 
+// required packages
 // sudo apt install clang-3.9 libclang-3.9-dev  llvm-3.9 llvm-3.9-dev
 //
-// clang++-3.9 citutorial.cpp $(llvm-config-3.9 --cxxflags) $(llvm-config-3.9 --ldflags --libs --system-libs) -lclangFrontend -lclangFrontendTool  -lclangParse -lclangSema -lclangEdit -lclangRewrite -lclangRewriteFrontend -lclangStaticAnalyzerFrontend -lclangStaticAnalyzerCheckers -lclangStaticAnalyzerCore -lclangSerialization -lclangFormat -lclangDriver -lclangTooling -lclangToolingCore -lclangAST -lclangLex -lclangAnalysis -lclangBasic
+// build command sample
+// clang++-3.9 autoc2.cpp $(llvm-config-3.9 --cxxflags) $(llvm-config-3.9 --ldflags --libs --system-libs) -lclangFrontend -lclangFrontendTool  -lclangParse -lclangSema -lclangEdit -lclangRewrite -lclangRewriteFrontend -lclangStaticAnalyzerFrontend -lclangStaticAnalyzerCheckers -lclangStaticAnalyzerCore -lclangSerialization -lclangFormat -lclangDriver -lclangTooling -lclangToolingCore -lclangAST -lclangLex -lclangAnalysis -lclangBasic
 // clang++-3.9 citutorial.cpp $(llvm-config-3.9 --cxxflags) $(llvm-config-3.9 --ldflags --libs --system-libs) -lclangFrontend -lclangFrontendTool  -lclangParse -lclangSema -lclangEdit -lclangRewrite -lclangRewriteFrontend -lclangStaticAnalyzerFrontend -lclangStaticAnalyzerCheckers -lclangStaticAnalyzerCore -lclangSerialization -lclangFormat -lclangDriver -lclangTooling -lclangToolingCore -lclangAST -lclangLex -lclangAnalysis -lclangBasic
 //./a.out input04.c
 
