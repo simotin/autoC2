@@ -15,6 +15,7 @@
 #include "clang/AST/ASTContext.h"
 #include "clang/AST/ASTConsumer.h"
 #include "clang/AST/RecursiveASTVisitor.h"
+#include "clang/AST/Stmt.h"
 #include "clang/Parse/Parser.h"
 #include "clang/Parse/ParseAST.h"
 
@@ -35,11 +36,17 @@ class CovmeASTVisitor : public clang::RecursiveASTVisitor<CovmeASTVisitor>
 
 public:
 
-	bool VisitStmt(clang::Stmt *s)
+	bool VisitStmt(clang::Stmt *stmt)
 	{
 		fprintf(stdout, "******** VisitStmt In  ... ********\n");
-		s->getStmtClass();
-		fprintf(stdout, "visitStmt:%s \n", s->getStmtClassName() );
+		fprintf(stdout, "visitStmt:%s \n", stmt->getStmtClassName() );
+		clang::Stmt::child_range range = stmt->children();
+		for (clang::Stmt::child_iterator it = range.begin(); it != range.end(); it++)
+		{
+			 switch (it->getStmtClass()) {
+			 }
+		}
+		
 		fprintf(stdout, "******** VisitStmt Out ... ********\n\n");
 		return true;
 	}
